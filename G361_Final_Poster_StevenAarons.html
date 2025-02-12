@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPoster Template</title>
+    <style>
+        body {
+            font-family: Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url("picture2.png");
+        }
+        header {
+            background-color: #3182bd;
+            color: white;
+            padding: 1px;
+            text-align: center;
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 20px;
+            overflow: hidden;
+        }
+        .section h2 {
+            background-color: #9ecae1; 
+            color: white;
+            margin: -15px -15px 15px -15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            position: absolute;
+            text-size-adjust: auto;
+            text-align: center;
+            width: 350px;
+            
+        }
+        .split-sections .section h2 {
+            width:350px;
+        }
+        .section h4 {
+            color:white;
+        }
+        .section1 {
+            width: 350px;
+            height: 430px;  /* Slightly taller */
+            scroll-behavior: smooth;
+        }
+        .section2, .section3 {
+            width: 350px;
+            height: 390px;
+        }
+        .section-content {
+            height: calc(100% - 10px);
+            overflow: auto;
+            overflow-x: hidden;
+            text-align: left;
+            padding: 15px;
+        }
+        .img-container {
+            width: 100%;
+            max-width: 320px;
+            margin: 10px auto;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+        .section-content img {
+            width: 100%;
+            display:block;
+            height: auto;
+            display: block;
+            max-height: 200px;
+            object-fit: contain;
+        }
+        .section, .section-content, .image-container {
+            box-sizing: border-box;
+        }
+        .popup img {
+            width: 100%;
+            max-width: 560px;
+            height: auto;
+            margin: 15px auto;
+            display: block;
+            object-fit: contain;
+        }
+        .popup img #small {
+            max-width:100 px;
+        }
+        .split-sections {
+            display: flex;
+            flex-direction: column;
+            width: 350px;
+            height: 500px;
+        }
+        .split-sections .section {
+            height: 50%;
+            flex: 1;
+        }
+        footer {
+            background-color: #3182bd;
+            color: white;
+            text-align: center;
+            padding: 0px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            /* Remove transform and use calculated positioning */
+            left: 10vw;  /* 10% of viewport width from left */
+            right: 10vw; /* 10% of viewport width from right */
+            top: 10vh;   /* 10% of viewport height from top */
+            bottom: 10vh; /* 10% of viewport height from bottom */
+            width: auto;
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+            text-align: left;
+            line-height: 30px;
+            animation: fadeIn 0.3s forwards;
+            overflow-y: auto;
+            overflow-x: hidden;
+            /* Add GPU acceleration but avoid transform */
+            will-change: opacity;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        #figure {
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        #cit {
+            padding-left: 22px ;
+            text-indent: -22px ;
+        }
+        table {
+            width: 100%;
+            height: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+        padding: 5px;
+        text-align: left;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .popup button {
+            margin-top: 10px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            background: none;
+            color: rgb(164, 164, 164);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .popup button:hover {
+            background: #003366;
+        }
+        button.transparent {
+            background: none;
+            border: none;
+            color: #4b97e2;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        button.transparent:hover {
+            color: #002244;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Weather Station Point Interpolation Analysis</h1>
+        <h3>Steven Aarons, Hunter College</h3>
+    </header>
+
+    <main>
+        <div class="row">
+            <div class="section section1">
+                <div class="section-content">
+                    <h2>INTRODUCTION</h2>
+                    <h4> space </h4>
+                    <h3>NWP and Traditional Weather Forecasting</h3>
+                    <p>The majority of weather forecasts are created using Numerical Weather Prediction (NWP) models. These models first assimilate multiple sources of data including: geostationary and polar-orbiting satellites, weather stations, ground-radar stations, radiosondes, and more (NOAA, 2023). This data is used to construct a model of the current conditions of the atmosphere and oceans. This is known as the initial state. Then, using equations based on physics the NWP model computes the fluid dynamics of the atmosphere one timestep in the future (Shuman, 1989).These equations are non-linear and therefore discretized across a 3D grid to derive useful results, meaning a partial derivative is solved at each grid box. This process is repeated until the desired forecast is created. NWP models require high computational power and use supercomputers to solve these equations.
+                    </p>
+                    <img src="NWPpipline.png" alt="Figure 1. Simplified representation of NWP data processing pipeline (NOAA 2023).">
+                    <p id="figure">Figure 1. Simplified representation of NWP data processing pipeline (NOAA 2023).<p>
+                    <p>The largest challenge with weather forecasting is maintaining high accuracy in weather prediction when forecasting far into the future. There are multiple factors that lead to decreased accuracy with increasing lead-time, or how far into the future the weather is forecasted. The physics-based equations can only account for atmospheric processes that occur at a large scale covering multiple or all gridboxes. These equations are also resolved explicitly, meaning the computer attempts to create a simpler equation that has a direct relationship between the dependent and independent variable. Based on the order of the time integration schemes that attempt to solve the equations, they are approximated to a degree to reduce computational constraint. These approximations are compounded each time a new timestep is computed.</p>
+                    <p>However, the main problem lies in atmospheric processes that are either too complex to simply model with an equation, or occur at scales smaller than the grid spacing, meaning they cannot be properly discretized. Some examples of these processes include: radiative transfer schemes, convection, turbulence, cumulus cloud formation, cloud microphysics, and more (Arakawa, 2004). Instead, these processes and their effects are estimated in what is known as parameterization. Unfortunately, many of the processes that contribute to precipitation occur at the sub-grid scale and therefore make predicting precipitation a challenge even with all the advancements in NWPs. These factors along with the computational constraint that comes with attempting to increase the horizontal resolution (or decrease the grid spacing) leads to forecasts that cannot accurately model the weather with a lead time of over 7-10 days on average.</p> 
+                    <p>“A seven-day forecast can accurately predict the weather about 80 percent of the time and a five-day forecast can accurately predict the weather approximately 90 percent of the time. However, a 10-day…forecast is only right about half the time” (NOAA SciJinks, 2023).</p>
+                    <img src="leadtime.png" alt="Figure 2. Forecast Skill vs. Forecast Range (lead-time) for different types of forecasts (Lukas, 2020).">
+                    <p id="figure">Figure 2. Forecast Skill vs. Forecast Range (lead-time) for different types of forecasts (Lukas, 2020).</p>
+                    <p> Figure 2. shows the different types of forecast models and their skill (i.e. accuracy) vs. their lead time. Weather forecasts, which are the focus of this research, have very high skill but decrease very quickly with lead-time. This differs from climate forecasts which have lower skill but maintain skill for much longer lead times.</p>
+                    <p>Previous work involved analyzing parameterization schemes for the Weather Research and Forecasting Advanced Research Model (WRF-ARW) in a case study. This focused on a weather forecasting failure, seen on March 2, 2018, when a major snow-storm unexpectedly brought inches of snow to the Hudson valley and North-East United States. The National Weather Service blended warm and cold operational forecasts and created a forecast that predicted the precipitation in the region as a blend of snow and rain. However, the predicted snow depth in the Albany area differed by approximately 8-12 inches. As a result of the storm five people lost their lives and over a million customers lost power across the United States (Wochit, 2018).                        
+                    </p>
+                    <h3>Deep Learning for Weather Forecasting</h3>
+                    <p>Deep learning (DL) algorithms derive a relationship between variables in a large database to predict a selected variable. DL does not need to understand the physical relationships that create atmospheric conditions and instead derives its own equations between variables. This non-numerical processing can lower the computational constraint, as opposed to computing physics partial-derivative equations, and can better estimate processes that would be parameterized by taking historical data into account. However, in the same vein, the DL model can output a forecast that does not adhere to the laws of physics such as conservation of mass or energy (Lockwood, et. al 2024).</p>	
+                    <p>As a part of the CUNY NSF REU in Remote Sensing, under the mentorship of Yanna Chen, from the University of Albany,  a dual convolution neural network model (CNN) in the U-Net architecture was created to predict precipitation and compare the accuracy of those predictions with observational data. The first part of the dual model is a classification model which produces the probability of rain or no rain at each grid point (Badrinath, 2023). This probability is thresholded at 0.5, which is common with sigmoid activation functions in the last layer of a neural network. Binary array is constructed of predicted rain or no rain points. That binary mask is then applied to the second part of the dual model, a continuous regression U-net which attempts to predict the numerical amount of precipitation at that grid point. This masks any numbers the regression U-net predicts in classified “no-rain” grid points.</p> 
+                    <img src="Modelarch.png" alt="Figure 3. U-net Architecture">
+                    <h3>Searching for Ground Truth</h3>
+                    <p>Currently the model uses The European Center for Medium Range Weather Forecasting (ECMWF) ERA-5 reanalysis dataset for both the input features and labels, we wish to predict, such as total precipitation. In order to post-process NWP output to be more inline with observational data, the labels need to be of the same size and shape as the features, particularly for the U-net architecture see Figure 3., above.</p>
+                    <p>As weather station data is collected for that particular location, it is point data. Weather forecasts cover the entire domain, or region, that they are trying to forecast in a grid or array format. The value depicted in the grid box may be the value for the center point of the gridbox or average values for the entire gridbox, depending on the NWP model and the grid model used. Regardless, the point data needs to match the array shape and size of the forecast we wish to post-process.</p>
+                    <p>Interpolation is the process of estimating values at unsampled locations between given points. To determine the best method for converting weather station point data to raster data, we analyze a number of interpolation techniques through the Geostatistical Analyst extension in ArcGIS Pro. To gauge a model’s predictive power we use cross-validation, a leave-one-out resampling method that first interpolates the data with all points to set model parameters and then removes one point at a time to predict the value at that point’s location and calculate the error with the actual value. A visual representation of cross-validation is shown in Figure 4.</p>
+                    <img src="crossval.png" alt="Figure 2. Forecast Skill vs. Forecast Range (lead-time) for different types of forecasts (Lukas, 2020).">
+                    <p id="figure">Figure 4. A red point is hidden, and the value is predicted from the remaining points. This process is repeated for all points (ArcGIS Pro).
+                    </p>
+                </div>
+                <button class="transparent" onclick="openPopup('popup1')">&#9660;</button>
+            </div>
+            <div class="section section2">
+                <div class="section-content">
+                    <h2>DATA & METHODOLOGY</h2>
+                    <h4> space </h4>
+                    <img src="demmap.png" alt="MESONET MAP AND DEM">
+                    <p id="figure">Figure 5. NYS Mesonet Weather Stations overlayed on to the NYS Digital Elevation Map (NYS Mesonet).
+                    <h3>NYS Mesonet</h3>
+                    <p>The NYS Mesonet Weather Station Network consists of 127 weather stations, spaced at an average of 17 miles apart with at least one site in every county and borough (Mesonet). The locations of the weather stations are shown in the figure above. The data is available in 5-minute or hourly intervals, hourly data was selected for temporal alignment with NWP model output. NYS Mesonet was installed in 2014, and while neural networks typically require several decades of data, other precipitation datasets, including ASOS, HPD, and COOP, which date back to the 1950s, were found to be full of null values. This is expected as sensor quality has advanced over time, however, even more recent data, starting in 2009, was found to be mostly null. These other datasets also had the disadvantage of having fewer locations than NYS Mesonet.</p> 
+                    <h3>Elevation Data</h3>
+                    <p>Certain interpolation methods, like Empirical Bayesian Kriging (EBK) Regression Prediction, require an explanatory raster. For this, the ⅓ arc second (approximately 10m resolution) Digital Elevation Map (DEM) from the National Map Download was acquired (The National Map download). The NYS State Boundary Shapefile from NYS GOV Civil boundaries was also procured (NYS GOV Civil).</p>
+                    <h3>Methodology</h3>
+                    <p>The Mesonet data was acquired in NetCDF format. An error reading the columns with the NetCDF points to Feature Class tool required conversion into .csv format through the Xarray Python package before importing to ArcGIS Pro. The data variables from the Mesonet file are shown in Table 1., below.</p> 
+                    <table border="1">
+                        <caption>Table 1. NYS Mesonet Selected Variables</caption>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Variables</th>
+                            <th>Units</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Latitude, longitude, and elevation</td>
+                            <td>m</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Maximum/minimum/average air temperature at 2 meters (6 feet)</td>
+                            <td>K</td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>Maximum/minimum/average relative humidity at 2 meters (6 feet)</td>
+                            <td>percent</td>
+                          </tr>
+                          <tr>
+                            <td>4</td>
+                            <td>Maximum/minimum/average dewpoint at 2 meters (6 feet)</td>
+                            <td>K</td>
+                          </tr>
+                          <tr>
+                            <td>5</td>
+                            <td>Liquid-equivalent precipitation, maximum 1-hour accumulation</td>
+                            <td>mm</td>
+                          </tr>
+                          <tr>
+                            <td>6</td>
+                            <td>Average wind speed and direction, wind maximum, wind speed standard deviation, and wind direction standard deviation from the best available sensor at 10 meters (33 feet)</td>
+                            <td>m/s</td>
+                          </tr>
+                          <tr>
+                            <td>7</td>
+                            <td>Total incoming solar radiation at 2 meters (6 feet)</td>
+                            <td>MJ/m<sup>2</sup></td>
+                          </tr>
+                          <tr>
+                            <td>8</td>
+                            <td>Maximum/minimum/average soil moisture at 5, 25, and 50 cm below the ground</td>
+                            <td>m<sup>3</sup>/m<sup>3</sup></td>
+                          </tr>
+                        </tbody>
+                      </table>                      
+                    <p>The data spans February of 2018. First, null values were selected and deleted leading to 119 weather station points per hour, from the original 127. These null values may be weather stations that have not been online as of 2018 or the result of sensor errors. A single hour, 02/02/2018 12:00AM, whose distribution of rain to no rain points approximately equal to the distribution of the month was selected for the interpolation analysis.</p> 
+                    
+                    <p>Co-Kriging interpolation allows for up to four additional variables to refine the model to better estimate the autocorrelation with the selected data field, precipitation, and cross-correlation between variables. To select the best variables to help predict precipitation, the exploratory regression tool was used. This tool evaluates all possible combinations of explanatory variables by creating OLS models to best explain the dependent variable. The summary of variable significance is shown below in Table 2. The percent positive or negative refers to the direction of the correlation.</p> 
+                    
+                    <table border="1">
+                        <caption>Table 2. Exploratory Regression Summary</caption>
+                        <thead>
+                          <tr>
+                            <th>Variable</th>
+                            <th>% Significant</th>
+                            <th>% Negative</th>
+                            <th>% Positive</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Maximum Temperature 2m</td>
+                            <td>95.56</td>
+                            <td>5.93</td>
+                            <td>94.07</td>
+                          </tr>
+                          <tr>
+                            <td>Minimum Dewpoint</td>
+                            <td>89.55</td>
+                            <td>48.51</td>
+                            <td>51.49</td>
+                          </tr>
+                          <tr>
+                            <td>Average Relative Humidity</td>
+                            <td>89.33</td>
+                            <td>7.33</td>
+                            <td>92.67</td>
+                          </tr>
+                          <tr>
+                            <td>Average Dewpoint</td>
+                            <td>85.82</td>
+                            <td>66.42</td>
+                            <td>33.58</td>
+                          </tr>
+                          <tr>
+                            <td>Maximum Dewpoint</td>
+                            <td>85.19</td>
+                            <td>84.44</td>
+                            <td>15.56</td>
+                          </tr>
+                          <tr>
+                            <td>Average Temperature 2m</td>
+                            <td>83.58</td>
+                            <td>29.85</td>
+                            <td>70.15</td>
+                          </tr>
+                          <tr>
+                            <td>Maximum Relative Relative Humidity</td>
+                            <td>81.46</td>
+                            <td>47.68</td>
+                            <td>52.32</td>
+                          </tr>
+                          <tr>
+                            <td>Minimum Temperature 2m</td>
+                            <td>79.26</td>
+                            <td>58.52</td>
+                            <td>41.48</td>
+                          </tr>
+                          <tr>
+                            <td>Minimum Relative Relative Humidity</td>
+                            <td>77.33</td>
+                            <td>8.67</td>
+                            <td>91.33</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      
+                    
+                    <p>The top three most significant variables were selected for Co-Kriging: maximum temperature 2m, minimum dewpoint, average relative humidity.</p> 
+                    
+                    <p>To compare different interpolation models with default and optimized parameters, the Exploratory Interpolation tool was run.</p> 
+                    <h3>Interpolation</h3>
+                    <p>Between interpolation models, there are many factors to consider. Interpolation methods can either be classified as deterministic or geostatistical. Deterministic methods such as Inverse Distance Weighted (IDW) and Spline are directly based on surrounding measured values or on mathematical formulas that determine smoothness of the output surface. Geostatistical methods, such as Kriging, are statistical models that incorporate spatial autocorrelation, or the statistical relationships between measured points.</p>
+                    <p>The general formula for IDW and Kriging is shown in Equation 1., below:</p> 
+                    <img src="formula1.png" alt="Placeholder Image" id="small">
+
+                    <p id="figure">Formula 1. Where: Z(si) = the measured value at the ith location, λi = an unknown weight for the measured value at the ith location, s0 = the prediction location, N = the number of measured values</p> 
+
+                    <p>In IDW, the weight, λi, is determined solely by the distance from points to the prediction location.</p> 
+
+                    <p>In Kriging, the weights depend on the distance to the prediction location, a fitted model to the measured points, and the spatial relationships between measured values near the prediction location. Kriging estimates spatial autocorrelation through fitting a semivariogram and computing covariance functions. The empirical semivariogram function is shown below:</p> 
+
+                    <img src="formula2.png" alt="Equation 2. At points separated by distance, h, the semivariogram function calculates half the average of the squared differences between said points.">
+
+                    <p id="figure">Equation 2. At points separated by distance, h, the semivariogram function calculates half the average of the squared differences between said points.</p> 
+
+                    <p>Empirical Bayesian Kriging differs from other kriging methods by taking into account a level of uncertainty or error introduced by estimating the underlying semivariogram. EBK automatically adjusts the parameters that define the semivariogram through subsetting and running multiple simulations.</p> 
+
+                    <p>EBK 3D takes into account the elevation data at each point. This allows for incorporation of the height difference between points, as well as the distance.</p> 
+
+                    <p>EBK Regression Prediction combines ordinary least squares regression with simple kriging using an explanatory raster, such as elevation, to attempt to produce more accurate results than either Kriging or regular EBK can provide. For all EBK interpolations, the K-Bessel semivariogram function is selected as it is the most robust but requires more computational power.</p> 
+
+                    <p>Radial Basis Functions include Spline functions and are exact interpolators that attempt to fit a smooth surface across known points. Their function depends solely on the distance from a center point.</p> 
+                    
+                    <p>Kernel interpolators use a kernel function to determine how the weights are influenced based on distance. The exponential kernel function is shown below, where r is the radius centered at a point, h is bandwidth:</p>
+                    <img src="formula3.png" id="small" alt="Equation 3. Where r is the radius centered at a point, h is bandwidth:">
+                    <p>The 5th order polynomial kernel function is shown below:</p> 
+                    <img src="formula4.png" alt="Equation 4. Where r is the radius centered at a point, h is bandwidth:">
+                    <p>The following interpolation methods and their parameters were run in Geostatistical Wizard to determine if accuracy from the Exploratory Interpolation tool could be improved:</p>
+                    <p>EBK</p> 
+
+                    <p>EBK 3D, with point elevation data.</p> 
+
+                    <p>EBK Regression Prediction, with elevation raster.</p> 
+
+                    <p>IDW</p> 
+
+                    <p>Radial Basis Functions - Tension Spline</p> 
+
+                    <p>Kernel Interpolation - Exponential</p> 
+
+                    <p>Kernel Interpolation - 5th order polynomial</p> 
+
+                    <p>DEM tiles from the National Map Download were downloaded using the U-get application. These tiles were then combined using the Mosaic to New Raster Tool. This new raster was then clipped by the NY State Boundary shapefile.</p> 
+
+                    <p>All data was projected to the UTM18N State Plane projection using the Project tool, prior to any analysis.</p>
+
+                </div>
+                <button class="transparent" onclick="openPopup('popup2')">&#9660;</button>
+            </div>
+            <div class="section section3">
+                <div class="section-content">
+                    <h2>RESULTS</h2>
+                    <h4> space </h4>
+                    <img src="chart1.png" alt="Figure 5. Explanatory Interpolation Methods ranked by Root Mean Square Error (RMSE) with Mean Error shown">
+                    <p id="figure">Figure 5. Explanatory Interpolation Methods ranked by Root Mean Square Error (RMSE) with Mean Error shown.</p>
+                    <p>The bar chart above, in Figure 5., shows the top ranked interpolation method from the Exploratory Interpolation tool. These methods were compared using a single criterion - highest precision (accuracy). The highest ranking method is optimized Simple Kriging with a RMSE of approximately 0.2995.</p>
+                    <p>The following are the prediction surface maps produced through the selected interpolation methods in Geostatistical Wizard (GW). The accompanying scatterplot shows the measured versus predicted values in the cross-validation section of GW. The grey line represents a perfect 1:1 fit between measured and predicted values, where y=x. The blue line shows the best-fit line of the model’s fit through the scatterplot points, obtained through a regression from the predicted values against the measured values.</p>
+                    <embed src="resulr.pdf#zoom=75" width="800px" height="1200px" />
+                    <p>The bar chart in Figure 6., shows the output table of the Compare Geostatistical Layers tool, with a single criterion weighting, showing the highest prediction accuracy determined by RMSE, whose equation is shown below.</p>
+                    <img src="rmse.png" alt="RMSE Equation">
+                    <img src="chart2.png" alt="Figure 6. Bar Chart of output from Compare Geostatistical Layers Tool with highest predcition accuracy single criterion comparision">
+                    <p id="figure">Figure 6. Bar Chart of output from Compare Geostatistical Layers Tool with highest predcition accuracy single criterion comparision.</p>
+
+                </div>
+                <button class="transparent" onclick="openPopup('popup3')">&#9660;</button>
+            </div>
+            <div class="split-sections">
+                <div class="section">
+                    <div class="section-content">
+                        <h2>Discussion & Future Work</h2>
+                        <h4> space </h4>
+                        <p>Figure 6., shows that the lowest RMSE of the surface prediction maps created by GW belongs to Co-Kriging with a RMSE of approximately 0.2905. This is lower than the lowest RMSE from the Explanatory Interpolation tool, though the difference is so slight that it may not be statistically significant. In the same vein, the few degree difference between all the layers in general may not necessarily indicate a better performing model. It is also important to know that RMSE gives more weight to larger errors as the residuals are squared, making it particularly sensitive to outliers, and may punish certain models based on their intrinsic properties.</p>
+
+                        <p>To account for this limitation in comparing layers through a single criterion, RMSE, the Compare Geostatistical Layers tool is run again with a weighted average comparison method. The highest prediction accuracy, lowest bias, and lowest worst-case error were all weighted equally. The resulting table is shown below:</p>
+                        <table border="1">
+                            <thead>
+                              <tr>
+                                <th>Layer</th>
+                                <th>Highest Accuracy Rank</th>
+                                <th>Lowest Bias Rank</th>
+                                <th>Lowest Worst-Case Error Rank</th>
+                                <th>Weighted Average Rank</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>EBK Regression Prediction</td>
+                                <td>3</td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>2</td>
+                              </tr>
+                              <tr>
+                                <td>Empirical Bayesian Kriging</td>
+                                <td>4</td>
+                                <td>2</td>
+                                <td>4</td>
+                                <td>3.333333</td>
+                              </tr>
+                              <tr>
+                                <td>CoKriging</td>
+                                <td>1</td>
+                                <td>9</td>
+                                <td>1</td>
+                                <td>3.666667</td>
+                              </tr>
+                              <tr>
+                                <td>Inverse Distance Weighting</td>
+                                <td>5</td>
+                                <td>6</td>
+                                <td>3</td>
+                                <td>4.666667</td>
+                              </tr>
+                              <tr>
+                                <td>Radial Basis Functions</td>
+                                <td>6</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>5</td>
+                              </tr>
+                              <tr>
+                                <td>Exp Interpolation - Highest Rank</td>
+                                <td>2</td>
+                                <td>5</td>
+                                <td>9</td>
+                                <td>5.333333</td>
+                              </tr>
+                              <tr>
+                                <td>Empirical Bayesian Kriging 3D</td>
+                                <td>7</td>
+                                <td>3</td>
+                                <td>8</td>
+                                <td>6</td>
+                              </tr>
+                              <tr>
+                                <td>Kernel Interpolation Exp</td>
+                                <td>8</td>
+                                <td>7</td>
+                                <td>6</td>
+                                <td>7</td>
+                              </tr>
+                              <tr>
+                                <td>Kernel Interpolation 5th order</td>
+                                <td>9</td>
+                                <td>8</td>
+                                <td>7</td>
+                                <td>8</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <p>In this case, the top three highest ranked layers, in order from highest to lowest are: EBK Regression Prediction, followed by regular Empirical Bayesian Kriging, and finally CoKriging. Literature review and sources online, when starting this research, pointed to EBK Regression Prediction to be best equipped for interpolating weather station data, as weather variables are highly dependent on elevation. EBK Regression Prediction is able to capture large-scale trends, via regression, and local spatial patterns, via kriging, which explain why it was ranked the highest.</p> <p>EBK Regression Prediction is able to capture a greater level of uncertainty, which is important when looking at the distribution of precipitation values. In NY state, precipitation occurs relatively infrequently which results in an extremely right skewed distribution of precipitation values. Deep learning requires a level of normality between data samples and incorporating the elevation raster may lead to more similar prediction maps when produced by EBK Regression prediction as opposed to Co-Kriging. For the case of interpolating weather station data into a grid/raster format for input as the “y” or ground truth variable in my deep learning model, because of the overall robustness of the model, EBK Regression Prediction is chosen as the process for interpolating NYS Mesonet weather station precipitation values.</p> <p>Further research on interpolation may involve interpolating values through time as well as space, though little research and information is available for this research, it seems logical that interpolation models, particularly those that take autocorrelation into account would improve through fitting the model onto multiple hours of data and iteratively refining. The Space Time Mining Toolkit will be assessed for its applicability for this scenario.</p>                            
+                    </div>
+                    <button class="transparent" onclick="openPopup('popup4_1')">&#9660;</button>
+                </div>
+                <div class="section">
+                    <div class="section-content">
+                        <h2>Acknowledgements & References</h2>
+                        <h4> space </h4>
+                        <h3>Acknowledgements</h3>
+                        <p>The author would like to thank Professor Sun for his continued guidance throughout the course and input on this project.</p> <p>This research is made possible by the New York State (NYS) Mesonet. Original funding for the NYS Mesonet (NYSM) buildup was provided by Federal Emergency Management Agency grant FEMA-4085-DR-NY. The continued operation and maintenance of the NYSM is supported by the National Mesonet Program, University at Albany, Federal and private grants, and others.</p> <p>This research project was supported by NSF REU Grant AGS-2150432, NSF IUSE Grant ICER-2023174, and the Pinkerton Foundation (HIRES). The authors would like to express their gratitude to their faculty advisor Dr. Blake and mentor Yanna Chen for their guidance. The statements contained within the poster are not the opinions of the funding agency or the U.S. government but reflect the author’s opinions. Thank you to my mentor, Professor Yanna Chen from the University of Albany, for guiding me through this research.</p>
+                        <h3>References</h3>
+                        <p id="cit">Arakawa, A. (2004). The cumulus parameterization problem: Past, present, and future. Journal of Climate, 17, 2493–2525.</p>
+
+                        <p id="cit">Badrinath, A., Delle Monache, L., Hayatbini, N., Chapman, W., Cannon, F., & Ralph, M. (2023). Improving precipitation forecasts with convolutional neural networks. Weather and Forecasting, 38(2), 291-306. https://doi.org/10.1175/WAF-D-22-0002.1</p>
+
+                        <p id="cit">Brotzge, J. A., & Coauthors. (2020). A technical overview of the New York State Mesonet Standard Network. Journal of Atmospheric and Oceanic Technology, 37, 1827–1845. https://doi.org/10.1175/JTECH-D-19-0220.1</p>
+
+                        <p id="cit">Esri. (2024). How Kriging works (3.3). ArcGIS Pro. https://pro.arcgis.com/en/pro-app/3.3/tool-reference/3d-analyst/how-kriging-works.htm</p>
+
+                        <p id="cit">Esri. (2024). Performing cross-validation and validation (latest). ArcGIS Pro. https://pro.arcgis.com/en/pro-app/latest/help/analysis/geostatistical-analyst/performing-cross-validation-and-validation.htm</p>
+
+                        <p id="cit">Lockwood, J. W., Loridan, T., Lin, N., Oppenheimer, M., & Hannah, N. (2024). A machine learning approach to model over-ocean tropical cyclone precipitation. Journal of Hydrometeorology, 25, 207–221. https://doi.org/10.1175/JHM-D-23-0065.1</p>
+
+                        <p id="cit">Lukas, J. (2020). Figure 1: Schematic showing typical forecast skill relative to forecast range (or lead time), and main sources of predictability, for three types of weather and climate forecasts. In J. Lukas & K. Payton (Eds.), Forecast skill and predictability (modified from E. Gawthrop & T. Barnston). International Research Institute for Climate and Society. Retrieved from https://coloradoriverscience.org/Weather_and_climate_forecasts</p>
+
+                        <p id="cit">National Oceanic and Atmospheric Administration. (2023, May 18). Upper air charts: Weather models. NOAA. Retrieved August 2, 2024, from https://www.noaa.gov/jetstream/upper-air-charts/weather-models</p>
+
+                        <p id="cit">National Oceanic and Atmospheric Administration. (n.d.). Forecast reliability. SciJinks. Retrieved August 2, 2024, from https://scijinks.gov/forecast-reliability/</p>
+
+                        <p id="cit">New York State GIS Clearinghouse. Civil boundaries. Retrieved December 22, 2024, from https://gis.ny.gov/civil-boundaries</p>
+
+                        <p id="cit">Shuman, F. G. (1989). History of numerical weather prediction at the National Meteorological Center. Weather and Forecasting, 4, 286–296. https://doi.org/10.1175/1520-0434(1989)004<0286>2.0.CO;2</p>
+
+                        <p id="cit">U.S. Geological Survey. (2023). The National Map: 1/3 arc-second digital elevation model (DEM) [Data set]. Retrieved December 17, 2024, from https://www.usgs.gov/the-national-map</p>
+
+                        <p id="cit">Wochit. (2018, March 2). Weather bomb cyclone: What it is and how it affects you. CNN. Retrieved August 2, 2024, from https://www.cnn.com/2018/03/02/us/weather-bomb-cyclone/index.html</p>
+
+                    </div>
+                    <button class="transparent" onclick="openPopup('popup4_2')">&#9660;</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Poster Produced for Final Requirments of Fall 2024 Course GTECH 361</p>
+    </footer>
+
+    <div id="popup1" class="popup">
+        <h2>INTRODUCTION</h2>
+        <h3>NWP and Traditional Weather Forecasting</h3>
+                    <p>The majority of weather forecasts are created using Numerical Weather Prediction (NWP) models. These models first assimilate multiple sources of data including: geostationary and polar-orbiting satellites, weather stations, ground-radar stations, radiosondes, and more (NOAA, 2023). This data is used to construct a model of the current conditions of the atmosphere and oceans. This is known as the initial state. Then, using equations based on physics the NWP model computes the fluid dynamics of the atmosphere one timestep in the future (Shuman, 1989).These equations are non-linear and therefore discretized across a 3D grid to derive useful results, meaning a partial derivative is solved at each grid box. This process is repeated until the desired forecast is created. NWP models require high computational power and use supercomputers to solve these equations.
+                    </p>
+                    <img src="NWPpipline.png" alt="Figure 1. Simplified representation of NWP data processing pipeline (NOAA 2023).">
+                    <p id="figure">Figure 1. Simplified representation of NWP data processing pipeline (NOAA 2023).<p>
+                    <p>The largest challenge with weather forecasting is maintaining high accuracy in weather prediction when forecasting far into the future. There are multiple factors that lead to decreased accuracy with increasing lead-time, or how far into the future the weather is forecasted. The physics-based equations can only account for atmospheric processes that occur at a large scale covering multiple or all gridboxes. These equations are also resolved explicitly, meaning the computer attempts to create a simpler equation that has a direct relationship between the dependent and independent variable. Based on the order of the time integration schemes that attempt to solve the equations, they are approximated to a degree to reduce computational constraint. These approximations are compounded each time a new timestep is computed.</p>
+                    <p>However, the main problem lies in atmospheric processes that are either too complex to simply model with an equation, or occur at scales smaller than the grid spacing, meaning they cannot be properly discretized. Some examples of these processes include: radiative transfer schemes, convection, turbulence, cumulus cloud formation, cloud microphysics, and more (Arakawa, 2004). Instead, these processes and their effects are estimated in what is known as parameterization. Unfortunately, many of the processes that contribute to precipitation occur at the sub-grid scale and therefore make predicting precipitation a challenge even with all the advancements in NWPs. These factors along with the computational constraint that comes with attempting to increase the horizontal resolution (or decrease the grid spacing) leads to forecasts that cannot accurately model the weather with a lead time of over 7-10 days on average.</p> 
+                    <p>“A seven-day forecast can accurately predict the weather about 80 percent of the time and a five-day forecast can accurately predict the weather approximately 90 percent of the time. However, a 10-day…forecast is only right about half the time” (NOAA SciJinks, 2023).</p>
+                    <img src="leadtime.png" alt="Figure 2. Forecast Skill vs. Forecast Range (lead-time) for different types of forecasts (Lukas, 2020).">
+                    <p id="figure">Figure 2. Forecast Skill vs. Forecast Range (lead-time) for different types of forecasts (Lukas, 2020).</p>
+                    <p> Figure 2. shows the different types of forecast models and their skill (i.e. accuracy) vs. their lead time. Weather forecasts, which are the focus of this research, have very high skill but decrease very quickly with lead-time. This differs from climate forecasts which have lower skill but maintain skill for much longer lead times.</p>
+                    <p>Previous work involved analyzing parameterization schemes for the Weather Research and Forecasting Advanced Research Model (WRF-ARW) in a case study. This focused on a weather forecasting failure, seen on March 2, 2018, when a major snow-storm unexpectedly brought inches of snow to the Hudson valley and North-East United States. The National Weather Service blended warm and cold operational forecasts and created a forecast that predicted the precipitation in the region as a blend of snow and rain. However, the predicted snow depth in the Albany area differed by approximately 8-12 inches. As a result of the storm five people lost their lives and over a million customers lost power across the United States (Wochit, 2018).                        
+                    </p>
+                    <h3>Deep Learning for Weather Forecasting</h3>
+                    <p>Deep learning (DL) algorithms derive a relationship between variables in a large database to predict a selected variable. DL does not need to understand the physical relationships that create atmospheric conditions and instead derives its own equations between variables. This non-numerical processing can lower the computational constraint, as opposed to computing physics partial-derivative equations, and can better estimate processes that would be parameterized by taking historical data into account. However, in the same vein, the DL model can output a forecast that does not adhere to the laws of physics such as conservation of mass or energy (Lockwood, et. al 2024).</p>	
+                    <p>As a part of the CUNY NSF REU in Remote Sensing, under the mentorship of Yanna Chen, from the University of Albany,  a dual convolution neural network model (CNN) in the U-Net architecture was created to predict precipitation and compare the accuracy of those predictions with observational data. The first part of the dual model is a classification model which produces the probability of rain or no rain at each grid point (Badrinath, 2023). This probability is thresholded at 0.5, which is common with sigmoid activation functions in the last layer of a neural network. Binary array is constructed of predicted rain or no rain points. That binary mask is then applied to the second part of the dual model, a continuous regression U-net which attempts to predict the numerical amount of precipitation at that grid point. This masks any numbers the regression U-net predicts in classified “no-rain” grid points.</p> 
+                    <img src="Modelarch.png" alt="Figure 3. U-net Architecture">
+                    <h3>Searching for Ground Truth</h3>
+                    <p>Currently the model uses The European Center for Medium Range Weather Forecasting (ECMWF) ERA-5 reanalysis dataset for both the input features and labels, we wish to predict, such as total precipitation. In order to post-process NWP output to be more inline with observational data, the labels need to be of the same size and shape as the features, particularly for the U-net architecture see Figure 3., above.</p>
+                    <p>As weather station data is collected for that particular location, it is point data. Weather forecasts cover the entire domain, or region, that they are trying to forecast in a grid or array format. The value depicted in the grid box may be the value for the center point of the gridbox or average values for the entire gridbox, depending on the NWP model and the grid model used. Regardless, the point data needs to match the array shape and size of the forecast we wish to post-process.</p>
+                    <p>Interpolation is the process of estimating values at unsampled locations between given points. To determine the best method for converting weather station point data to raster data, we analyze a number of interpolation techniques through the Geostatistical Analyst extension in ArcGIS Pro. To gauge a model’s predictive power we use cross-validation, a leave-one-out resampling method that first interpolates the data with all points to set model parameters and then removes one point at a time to predict the value at that point’s location and calculate the error with the actual value. A visual representation of cross-validation is shown in Figure 4.</p>
+                    <img src="crossval.png" alt="Figure 2. Forecast Skill vs. Forecast Range (lead-time) for different types of forecasts (Lukas, 2020).">
+                    <p id="figure">Figure 4. A red point is hidden, and the value is predicted from the remaining points. This process is repeated for all points (ArcGIS Pro).
+                    </p>
+        <button onclick="closePopup('popup1')">Close</button>
+    </div>
+
+    <div id="popup2" class="popup">
+        <h2>DATA & METHODOLOGY</h2>
+                    <img src="demmap.png" alt="MESONET MAP AND DEM">
+                    <p id="figure">Figure 5. NYS Mesonet Weather Stations overlayed on to the NYS Digital Elevation Map (NYS Mesonet).
+                    <h3>NYS Mesonet</h3>
+                    <p>The NYS Mesonet Weather Station Network consists of 127 weather stations, spaced at an average of 17 miles apart with at least one site in every county and borough (Mesonet). The locations of the weather stations are shown in the figure above. The data is available in 5-minute or hourly intervals, hourly data was selected for temporal alignment with NWP model output. NYS Mesonet was installed in 2014, and while neural networks typically require several decades of data, other precipitation datasets, including ASOS, HPD, and COOP, which date back to the 1950s, were found to be full of null values. This is expected as sensor quality has advanced over time, however, even more recent data, starting in 2009, was found to be mostly null. These other datasets also had the disadvantage of having fewer locations than NYS Mesonet.</p> 
+                    <h3>Elevation Data</h3>
+                    <p>Certain interpolation methods, like Empirical Bayesian Kriging (EBK) Regression Prediction, require an explanatory raster. For this, the ⅓ arc second (approximately 10m resolution) Digital Elevation Map (DEM) from the National Map Download was acquired (The National Map download). The NYS State Boundary Shapefile from NYS GOV Civil boundaries was also procured (NYS GOV Civil).</p>
+                    <h3>Methodology</h3>
+                    <p>The Mesonet data was acquired in NetCDF format. An error reading the columns with the NetCDF points to Feature Class tool required conversion into .csv format through the Xarray Python package before importing to ArcGIS Pro. The data variables from the Mesonet file are shown in Table 1., below.</p> 
+                    <table border="1">
+                        <caption>Table 1. NYS Mesonet Selected Variables</caption>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Variables</th>
+                            <th>Units</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Latitude, longitude, and elevation</td>
+                            <td>m</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Maximum/minimum/average air temperature at 2 meters (6 feet)</td>
+                            <td>K</td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>Maximum/minimum/average relative humidity at 2 meters (6 feet)</td>
+                            <td>percent</td>
+                          </tr>
+                          <tr>
+                            <td>4</td>
+                            <td>Maximum/minimum/average dewpoint at 2 meters (6 feet)</td>
+                            <td>K</td>
+                          </tr>
+                          <tr>
+                            <td>5</td>
+                            <td>Liquid-equivalent precipitation, maximum 1-hour accumulation</td>
+                            <td>mm</td>
+                          </tr>
+                          <tr>
+                            <td>6</td>
+                            <td>Average wind speed and direction, wind maximum, wind speed standard deviation, and wind direction standard deviation from the best available sensor at 10 meters (33 feet)</td>
+                            <td>m/s</td>
+                          </tr>
+                          <tr>
+                            <td>7</td>
+                            <td>Total incoming solar radiation at 2 meters (6 feet)</td>
+                            <td>MJ/m<sup>2</sup></td>
+                          </tr>
+                          <tr>
+                            <td>8</td>
+                            <td>Maximum/minimum/average soil moisture at 5, 25, and 50 cm below the ground</td>
+                            <td>m<sup>3</sup>/m<sup>3</sup></td>
+                          </tr>
+                        </tbody>
+                      </table>                      
+                    <p>The data spans February of 2018. First, null values were selected and deleted leading to 119 weather station points per hour, from the original 127. These null values may be weather stations that have not been online as of 2018 or the result of sensor errors. A single hour, 02/02/2018 12:00AM, whose distribution of rain to no rain points approximately equal to the distribution of the month was selected for the interpolation analysis.</p> 
+                    
+                    <p>Co-Kriging interpolation allows for up to four additional variables to refine the model to better estimate the autocorrelation with the selected data field, precipitation, and cross-correlation between variables. To select the best variables to help predict precipitation, the exploratory regression tool was used. This tool evaluates all possible combinations of explanatory variables by creating OLS models to best explain the dependent variable. The summary of variable significance is shown below in Table 2. The percent positive or negative refers to the direction of the correlation.</p> 
+                    
+                    <table border="1">
+                        <caption>Table 2. Exploratory Regression Summary</caption>
+                        <thead>
+                          <tr>
+                            <th>Variable</th>
+                            <th>% Significant</th>
+                            <th>% Negative</th>
+                            <th>% Positive</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Maximum Temperature 2m</td>
+                            <td>95.56</td>
+                            <td>5.93</td>
+                            <td>94.07</td>
+                          </tr>
+                          <tr>
+                            <td>Minimum Dewpoint</td>
+                            <td>89.55</td>
+                            <td>48.51</td>
+                            <td>51.49</td>
+                          </tr>
+                          <tr>
+                            <td>Average Relative Humidity</td>
+                            <td>89.33</td>
+                            <td>7.33</td>
+                            <td>92.67</td>
+                          </tr>
+                          <tr>
+                            <td>Average Dewpoint</td>
+                            <td>85.82</td>
+                            <td>66.42</td>
+                            <td>33.58</td>
+                          </tr>
+                          <tr>
+                            <td>Maximum Dewpoint</td>
+                            <td>85.19</td>
+                            <td>84.44</td>
+                            <td>15.56</td>
+                          </tr>
+                          <tr>
+                            <td>Average Temperature 2m</td>
+                            <td>83.58</td>
+                            <td>29.85</td>
+                            <td>70.15</td>
+                          </tr>
+                          <tr>
+                            <td>Maximum Relative Relative Humidity</td>
+                            <td>81.46</td>
+                            <td>47.68</td>
+                            <td>52.32</td>
+                          </tr>
+                          <tr>
+                            <td>Minimum Temperature 2m</td>
+                            <td>79.26</td>
+                            <td>58.52</td>
+                            <td>41.48</td>
+                          </tr>
+                          <tr>
+                            <td>Minimum Relative Relative Humidity</td>
+                            <td>77.33</td>
+                            <td>8.67</td>
+                            <td>91.33</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      
+                    
+                    <p>The top three most significant variables were selected for Co-Kriging: maximum temperature 2m, minimum dewpoint, average relative humidity.</p> 
+                    
+                    <p>To compare different interpolation models with default and optimized parameters, the Exploratory Interpolation tool was run.</p> 
+                    <h3>Interpolation</h3>
+                    <p>Between interpolation models, there are many factors to consider. Interpolation methods can either be classified as deterministic or geostatistical. Deterministic methods such as Inverse Distance Weighted (IDW) and Spline are directly based on surrounding measured values or on mathematical formulas that determine smoothness of the output surface. Geostatistical methods, such as Kriging, are statistical models that incorporate spatial autocorrelation, or the statistical relationships between measured points.</p>
+                    <p>The general formula for IDW and Kriging is shown in Equation 1., below:</p> 
+                    <img src="formula1.png" alt="Placeholder Image">
+
+                    <p id="figure">Formula 1. Where: Z(si) = the measured value at the ith location, λi = an unknown weight for the measured value at the ith location, s0 = the prediction location, N = the number of measured values</p> 
+
+                    <p>In IDW, the weight, λi, is determined solely by the distance from points to the prediction location.</p> 
+
+                    <p>In Kriging, the weights depend on the distance to the prediction location, a fitted model to the measured points, and the spatial relationships between measured values near the prediction location. Kriging estimates spatial autocorrelation through fitting a semivariogram and computing covariance functions. The empirical semivariogram function is shown below:</p> 
+
+                    <img src="formula2.png" alt="Equation 2. At points separated by distance, h, the semivariogram function calculates half the average of the squared differences between said points.">
+
+                    <p id="figure">Equation 2. At points separated by distance, h, the semivariogram function calculates half the average of the squared differences between said points.</p> 
+
+                    <p>Empirical Bayesian Kriging differs from other kriging methods by taking into account a level of uncertainty or error introduced by estimating the underlying semivariogram. EBK automatically adjusts the parameters that define the semivariogram through subsetting and running multiple simulations.</p> 
+
+                    <p>EBK 3D takes into account the elevation data at each point. This allows for incorporation of the height difference between points, as well as the distance.</p> 
+
+                    <p>EBK Regression Prediction combines ordinary least squares regression with simple kriging using an explanatory raster, such as elevation, to attempt to produce more accurate results than either Kriging or regular EBK can provide. For all EBK interpolations, the K-Bessel semivariogram function is selected as it is the most robust but requires more computational power.</p> 
+
+                    <p>Radial Basis Functions include Spline functions and are exact interpolators that attempt to fit a smooth surface across known points. Their function depends solely on the distance from a center point.</p> 
+                    
+                    <p>Kernel interpolators use a kernel function to determine how the weights are influenced based on distance. The exponential kernel function is shown below, where r is the radius centered at a point, h is bandwidth:</p>
+                    <img src="formula3.png" alt="Equation 3. Where r is the radius centered at a point, h is bandwidth:">
+                    <p>The 5th order polynomial kernel function is shown below:</p> 
+                    <img src="formula4.png" alt="Equation 4. Where r is the radius centered at a point, h is bandwidth:">
+                    <p>The following interpolation methods and their parameters were run in Geostatistical Wizard to determine if accuracy from the Exploratory Interpolation tool could be improved:</p>
+                    <p>EBK</p> 
+
+                    <p>EBK 3D, with point elevation data.</p> 
+
+                    <p>EBK Regression Prediction, with elevation raster.</p> 
+
+                    <p>IDW</p> 
+
+                    <p>Radial Basis Functions - Tension Spline</p> 
+
+                    <p>Kernel Interpolation - Exponential</p> 
+
+                    <p>Kernel Interpolation - 5th order polynomial</p> 
+
+                    <p>DEM tiles from the National Map Download were downloaded using the U-get application. These tiles were then combined using the Mosaic to New Raster Tool. This new raster was then clipped by the NY State Boundary shapefile.</p> 
+
+                    <p>All data was projected to the UTM18N State Plane projection using the Project tool, prior to any analysis.</p>
+        <button onclick="closePopup('popup2')">Close</button>
+    </div>
+
+    <div id="popup3" class="popup">
+        <h2>RESULTS</h2>
+        <img src="chart1.png" alt="Figure 5. Explanatory Interpolation Methods ranked by Root Mean Square Error (RMSE) with Mean Error shown">
+        <p id="figure">Figure 5. Explanatory Interpolation Methods ranked by Root Mean Square Error (RMSE) with Mean Error shown.</p>
+        <p>The bar chart above, in Figure 5., shows the top ranked interpolation method from the Exploratory Interpolation tool. These methods were compared using a single criterion - highest precision (accuracy). The highest ranking method is optimized Simple Kriging with a RMSE of approximately 0.2995.</p>
+        <p>The following are the prediction surface maps produced through the selected interpolation methods in Geostatistical Wizard (GW). The accompanying scatterplot shows the measured versus predicted values in the cross-validation section of GW. The grey line represents a perfect 1:1 fit between measured and predicted values, where y=x. The blue line shows the best-fit line of the model’s fit through the scatterplot points, obtained through a regression from the predicted values against the measured values.</p>
+        <embed src="resulr.pdf#zoom=100" width="800px" height="1660px" />
+        <p>The bar chart in Figure 6., shows the output table of the Compare Geostatistical Layers tool, with a single criterion weighting, showing the highest prediction accuracy determined by RMSE, whose equation is shown below.</p>
+        <img src="rmse.png" alt="RMSE Equation">
+        <img src="chart2.png" alt="Figure 6. Compare Geostatistical Layers tool">
+        <p id="figure">Figure 6. Bar Chart of output from Compare Geostatistical Layers Tool with highest predcition accuracy single criterion comparision.</p>
+
+        <button onclick="closePopup('popup3')">Close</button>
+    </div>
+
+    <div id="popup4_1" class="popup">
+        <h2>Discussion & Future Work</h2>
+                        <p>Figure 6., shows that the lowest RMSE of the surface prediction maps created by GW belongs to Co-Kriging with a RMSE of approximately 0.2905. This is lower than the lowest RMSE from the Explanatory Interpolation tool, though the difference is so slight that it may not be statistically significant. In the same vein, the few degree difference between all the layers in general may not necessarily indicate a better performing model. It is also important to know that RMSE gives more weight to larger errors as the residuals are squared, making it particularly sensitive to outliers, and may punish certain models based on their intrinsic properties.</p>
+
+                        <p>To account for this limitation in comparing layers through a single criterion, RMSE, the Compare Geostatistical Layers tool is run again with a weighted average comparison method. The highest prediction accuracy, lowest bias, and lowest worst-case error were all weighted equally. The resulting table is shown below:</p>
+                        <table border="1">
+                            <thead>
+                              <tr>
+                                <th>Layer</th>
+                                <th>Highest Accuracy Rank</th>
+                                <th>Lowest Bias Rank</th>
+                                <th>Lowest Worst-Case Error Rank</th>
+                                <th>Weighted Average Rank</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>EBK Regression Prediction</td>
+                                <td>3</td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>2</td>
+                              </tr>
+                              <tr>
+                                <td>Empirical Bayesian Kriging</td>
+                                <td>4</td>
+                                <td>2</td>
+                                <td>4</td>
+                                <td>3.333333</td>
+                              </tr>
+                              <tr>
+                                <td>CoKriging</td>
+                                <td>1</td>
+                                <td>9</td>
+                                <td>1</td>
+                                <td>3.666667</td>
+                              </tr>
+                              <tr>
+                                <td>Inverse Distance Weighting</td>
+                                <td>5</td>
+                                <td>6</td>
+                                <td>3</td>
+                                <td>4.666667</td>
+                              </tr>
+                              <tr>
+                                <td>Radial Basis Functions</td>
+                                <td>6</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>5</td>
+                              </tr>
+                              <tr>
+                                <td>Exp Interpolation - Highest Rank</td>
+                                <td>2</td>
+                                <td>5</td>
+                                <td>9</td>
+                                <td>5.333333</td>
+                              </tr>
+                              <tr>
+                                <td>Empirical Bayesian Kriging 3D</td>
+                                <td>7</td>
+                                <td>3</td>
+                                <td>8</td>
+                                <td>6</td>
+                              </tr>
+                              <tr>
+                                <td>Kernel Interpolation Exp</td>
+                                <td>8</td>
+                                <td>7</td>
+                                <td>6</td>
+                                <td>7</td>
+                              </tr>
+                              <tr>
+                                <td>Kernel Interpolation 5th order</td>
+                                <td>9</td>
+                                <td>8</td>
+                                <td>7</td>
+                                <td>8</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <p>In this case, the top three highest ranked layers, in order from highest to lowest are: EBK Regression Prediction, followed by regular Empirical Bayesian Kriging, and finally CoKriging. Literature review and sources online, when starting this research, pointed to EBK Regression Prediction to be best equipped for interpolating weather station data, as weather variables are highly dependent on elevation. EBK Regression Prediction is able to capture large-scale trends, via regression, and local spatial patterns, via kriging, which explain why it was ranked the highest.</p> <p>EBK Regression Prediction is able to capture a greater level of uncertainty, which is important when looking at the distribution of precipitation values. In NY state, precipitation occurs relatively infrequently which results in an extremely right skewed distribution of precipitation values. Deep learning requires a level of normality between data samples and incorporating the elevation raster may lead to more similar prediction maps when produced by EBK Regression prediction as opposed to Co-Kriging. For the case of interpolating weather station data into a grid/raster format for input as the “y” or ground truth variable in my deep learning model, because of the overall robustness of the model, EBK Regression Prediction is chosen as the process for interpolating NYS Mesonet weather station precipitation values.</p> <p>Further research on interpolation may involve interpolating values through time as well as space, though little research and information is available for this research, it seems logical that interpolation models, particularly those that take autocorrelation into account would improve through fitting the model onto multiple hours of data and iteratively refining. The Space Time Mining Toolkit will be assessed for its applicability for this scenario.</p> 
+
+        <button onclick="closePopup('popup4_1')">Close</button>
+    </div>
+
+    <div id="popup4_2" class="popup">
+        <h2>Acknowledgements & References</h2>
+                        <h3>Acknowledgements</h3>
+                        <p>The author would like to thank Professor Sun for his continued guidance throughout the course and input on this project.</p> <p>This research is made possible by the New York State (NYS) Mesonet. Original funding for the NYS Mesonet (NYSM) buildup was provided by Federal Emergency Management Agency grant FEMA-4085-DR-NY. The continued operation and maintenance of the NYSM is supported by the National Mesonet Program, University at Albany, Federal and private grants, and others.</p> <p>This research project was supported by NSF REU Grant AGS-2150432, NSF IUSE Grant ICER-2023174, and the Pinkerton Foundation (HIRES). The authors would like to express their gratitude to their faculty advisor Dr. Blake and mentor Yanna Chen for their guidance. The statements contained within the poster are not the opinions of the funding agency or the U.S. government but reflect the author’s opinions. Thank you to my mentor, Professor Yanna Chen from the University of Albany, for guiding me through this research.</p>
+                        <h3>References</h3>
+                        <p id="cit">Arakawa, A. (2004). The cumulus parameterization problem: Past, present, and future. Journal of Climate, 17, 2493–2525.</p>
+
+                        <p id="cit">Badrinath, A., Delle Monache, L., Hayatbini, N., Chapman, W., Cannon, F., & Ralph, M. (2023). Improving precipitation forecasts with convolutional neural networks. Weather and Forecasting, 38(2), 291-306. https://doi.org/10.1175/WAF-D-22-0002.1</p>
+
+                        <p id="cit">Brotzge, J. A., & Coauthors. (2020). A technical overview of the New York State Mesonet Standard Network. Journal of Atmospheric and Oceanic Technology, 37, 1827–1845. https://doi.org/10.1175/JTECH-D-19-0220.1</p>
+
+                        <p id="cit">Esri. (2024). How Kriging works (3.3). ArcGIS Pro. https://pro.arcgis.com/en/pro-app/3.3/tool-reference/3d-analyst/how-kriging-works.htm</p>
+
+                        <p id="cit">Esri. (2024). Performing cross-validation and validation (latest). ArcGIS Pro. https://pro.arcgis.com/en/pro-app/latest/help/analysis/geostatistical-analyst/performing-cross-validation-and-validation.htm</p>
+
+                        <p id="cit">Lockwood, J. W., Loridan, T., Lin, N., Oppenheimer, M., & Hannah, N. (2024). A machine learning approach to model over-ocean tropical cyclone precipitation. Journal of Hydrometeorology, 25, 207–221. https://doi.org/10.1175/JHM-D-23-0065.1</p>
+
+                        <p id="cit">Lukas, J. (2020). Figure 1: Schematic showing typical forecast skill relative to forecast range (or lead time), and main sources of predictability, for three types of weather and climate forecasts. In J. Lukas & K. Payton (Eds.), Forecast skill and predictability (modified from E. Gawthrop & T. Barnston). International Research Institute for Climate and Society. Retrieved from https://coloradoriverscience.org/Weather_and_climate_forecasts</p>
+
+                        <p id="cit">National Oceanic and Atmospheric Administration. (2023, May 18). Upper air charts: Weather models. NOAA. Retrieved August 2, 2024, from https://www.noaa.gov/jetstream/upper-air-charts/weather-models</p>
+
+                        <p id="cit">National Oceanic and Atmospheric Administration. (n.d.). Forecast reliability. SciJinks. Retrieved August 2, 2024, from https://scijinks.gov/forecast-reliability/</p>
+
+                        <p id="cit">New York State GIS Clearinghouse. Civil boundaries. Retrieved December 22, 2024, from https://gis.ny.gov/civil-boundaries</p>
+
+                        <p id="cit">Shuman, F. G. (1989). History of numerical weather prediction at the National Meteorological Center. Weather and Forecasting, 4, 286–296. https://doi.org/10.1175/1520-0434(1989)004<0286>2.0.CO;2</p>
+
+                        <p id="cit">U.S. Geological Survey. (2023). The National Map: 1/3 arc-second digital elevation model (DEM) [Data set]. Retrieved December 17, 2024, from https://www.usgs.gov/the-national-map</p>
+
+                        <p id="cit">Wochit. (2018, March 2). Weather bomb cyclone: What it is and how it affects you. CNN. Retrieved August 2, 2024, from https://www.cnn.com/2018/03/02/us/weather-bomb-cyclone/index.html</p>
+
+        <button onclick="closePopup('popup4_2')">Close</button>
+    </div>
+
+    <div id="overlay" class="overlay" onclick="closeAllPopups()"></div>
+
+    <script>
+        function openPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function closeAllPopups() {
+            const popups = document.querySelectorAll('.popup');
+            popups.forEach(popup => popup.style.display = 'none');
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
